@@ -250,6 +250,11 @@ function SuggestionCard({ s, onVote, onDelete, onSetStatus }) {
       
       <CardContent className="p-4 pt-0 flex-1">
         <p className="text-sm font-sans text-muted-foreground line-clamp-3 mb-3 leading-relaxed">{s.overview || 'No system overview available.'}</p>
+        {s.imdbLink && (
+          <a href={s.imdbLink} target="_blank" rel="noreferrer" className="inline-flex items-center text-xs text-primary hover:underline font-mono mb-3">
+            <Film className="w-3 h-3 mr-1" /> View on IMDb
+          </a>
+        )}
         {s.note && (
           <div className="text-sm font-sans text-foreground/90 italic border-l-2 border-primary pl-3 bg-primary/5 py-2 pr-2 rounded-r-sm">
             "{s.note}"
@@ -300,10 +305,7 @@ function SuggestionCard({ s, onVote, onDelete, onSetStatus }) {
 // ───── FORM COMPONENT ─────
 function SuggestionForm({ onClose, onAdd }) {
   const [title, setTitle] = useState('');
-  const [year, setYear] = useState('');
-  const [genre, setGenre] = useState('');
-  const [note, setNote] = useState('');
-  const [submitter, setSubmitter] = useState('');
+  const [imdbLink, setImdbLink] = useState('');
   
   const [tmdbResults, setTmdbResults] = useState([]);
   const [selectedTmdb, setSelectedTmdb] = useState(null);
@@ -337,7 +339,6 @@ function SuggestionForm({ onClose, onAdd }) {
       genres: genres
     });
     setTitle(movie.title);
-    setYear(movie.release_date ? movie.release_date.substring(0,4) : '');
     setTmdbResults([]);
   };
 
@@ -352,7 +353,10 @@ function SuggestionForm({ onClose, onAdd }) {
     }
 
     onAdd({
-      title, year, genre, note, submitter,
+      title, 
+      imdbLink, 
+      submitter: 'Anonymous',
+      year: selectedTmdb?.year || '',
       tmdb: selectedTmdb,
       isAvailable
     });
@@ -404,24 +408,13 @@ function SuggestionForm({ onClose, onAdd }) {
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <label className="text-xs text-muted-foreground uppercase font-medium">Year</label>
-          <Input value={year} onChange={e => setYear(e.target.value)} className="font-mono bg-black/30 border-white/10 rounded-lg" />
-        </div>
-        <div className="space-y-2">
-          <label className="text-xs text-muted-foreground uppercase font-medium">Requested By</label>
-          <Input value={submitter} onChange={e => setSubmitter(e.target.value)} placeholder="Anonymous" className="font-sans bg-black/30 border-white/10 rounded-lg" />
-        </div>
-      </div>
-
       <div className="space-y-2">
-        <label className="text-xs text-muted-foreground uppercase font-medium">Additional Notes</label>
-        <Textarea 
-          value={note} 
-          onChange={e => setNote(e.target.value)}
-          className="font-sans bg-black/30 border-white/10 rounded-lg min-h-[80px] text-sm resize-none"
-          placeholder="Why should we watch this?"
+        <label className="text-xs text-muted-foreground uppercase font-medium">IMDb Link (Optional)</label>
+        <Input 
+          value={imdbLink} 
+          onChange={e => setImdbLink(e.target.value)} 
+          placeholder="https://www.imdb.com/title/tt0133093/" 
+          className="font-sans bg-black/30 border-white/10 rounded-lg text-sm"
         />
       </div>
 
