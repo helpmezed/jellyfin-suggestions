@@ -73,11 +73,11 @@ export default function App() {
       <div className="scanlines"></div>
       
       {/* HEADER */}
-      <header className="mb-8">
-        <pre className="text-foreground text-[10px] sm:text-xs md:text-sm font-bold leading-tight mb-4 whitespace-pre-wrap">
+      <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-md border-b border-border pt-4 pb-4 mb-8 -mx-4 px-4 md:-mx-8 md:px-8">
+        <pre className="text-primary terminal-glow text-[10px] sm:text-xs md:text-sm font-bold leading-tight mb-4 whitespace-pre-wrap font-mono">
           {ASCII_ART}
         </pre>
-        <div className="flex flex-wrap gap-4 items-center justify-between border-b border-border pb-4">
+        <div className="flex flex-wrap gap-4 items-center justify-between">
           <div className="flex gap-4 font-mono text-sm">
             <span className="text-muted-foreground">TOTAL: <span className="text-foreground">{stats.total}</span></span>
             <span className="text-muted-foreground">PENDING: <span className="text-foreground">{stats.pending}</span></span>
@@ -209,7 +209,7 @@ function SuggestionCard({ s, onVote, onDelete, onSetStatus }) {
   };
 
   return (
-    <Card className="bg-black/60 border-border overflow-hidden flex flex-col font-mono relative group hover:border-primary/50 transition-colors">
+    <Card className="bg-card border-border overflow-hidden flex flex-col font-mono relative group hover:border-primary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_-4px_rgba(46,204,113,0.15)]">
       <div className="absolute top-2 right-2 z-10 flex gap-2">
         {s.rating > 0 && (
           <Badge variant="outline" className="bg-black/80 backdrop-blur-sm border-yellow-500/30 text-yellow-500">
@@ -241,8 +241,8 @@ function SuggestionCard({ s, onVote, onDelete, onSetStatus }) {
 
       <CardHeader className="p-4 pb-2">
         <div className="flex justify-between items-start gap-2">
-          <CardTitle className="text-lg text-foreground font-bold leading-tight uppercase">{s.title}</CardTitle>
-          <Badge variant="outline" className={`uppercase text-[10px] ${statusColors[s.status] || ''}`}>
+          <CardTitle className="text-lg text-primary terminal-glow font-bold leading-tight uppercase tracking-wide">{s.title}</CardTitle>
+          <Badge variant="outline" className={`uppercase text-[10px] tracking-wider ${statusColors[s.status] || ''}`}>
             {s.status}
           </Badge>
         </div>
@@ -250,9 +250,9 @@ function SuggestionCard({ s, onVote, onDelete, onSetStatus }) {
       </CardHeader>
       
       <CardContent className="p-4 pt-0 flex-1">
-        <p className="text-xs text-muted-foreground line-clamp-3 mb-3">{s.overview || 'No system overview available.'}</p>
+        <p className="text-sm font-sans text-muted-foreground line-clamp-3 mb-3 leading-relaxed">{s.overview || 'No system overview available.'}</p>
         {s.note && (
-          <div className="text-xs text-foreground/90 italic border-l-2 border-primary pl-2 bg-primary/5 py-1 pr-1">
+          <div className="text-sm font-sans text-foreground/90 italic border-l-2 border-primary pl-3 bg-primary/5 py-2 pr-2 rounded-r-sm">
             "{s.note}"
           </div>
         )}
@@ -395,8 +395,8 @@ function SuggestionForm({ onClose, onAdd }) {
             <img src={`https://image.tmdb.org/t/p/w92${selectedTmdb.posterPath}`} alt={`${selectedTmdb.title} poster`} className="w-12 h-16 object-cover mix-blend-luminosity opacity-80" />
           ) : <div className="w-12 h-16 bg-black flex items-center justify-center"><Terminal className="w-6 h-6 text-primary/50"/></div>}
           <div className="flex-1 min-w-0">
-            <div className="text-sm font-bold truncate text-primary">{selectedTmdb.title}</div>
-            <div className="text-xs text-muted-foreground mt-1 line-clamp-2">{selectedTmdb.overview}</div>
+            <div className="text-sm font-bold truncate text-primary terminal-glow font-mono">{selectedTmdb.title}</div>
+            <div className="text-xs text-muted-foreground mt-1 line-clamp-2 font-sans">{selectedTmdb.overview}</div>
           </div>
           <button type="button" onClick={() => setSelectedTmdb(null)} className="self-start text-muted-foreground hover:text-destructive"><X className="w-4 h-4"/></button>
         </div>
@@ -418,7 +418,7 @@ function SuggestionForm({ onClose, onAdd }) {
         <Textarea 
           value={note} 
           onChange={e => setNote(e.target.value)}
-          className="font-mono bg-black/50 min-h-[80px]"
+          className="font-sans bg-black/50 min-h-[80px] text-sm"
           placeholder="Why target this media..."
         />
       </div>

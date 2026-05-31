@@ -6,35 +6,39 @@
 
 @layer base {
   :root {
-    --background: 120 100% 3%;
-    --foreground: 120 100% 50%;
+    /* Rich slate/obsidian dark background */
+    --background: 240 10% 4%;
+    --foreground: 210 20% 98%;
     
-    --card: 120 100% 5%;
-    --card-foreground: 120 100% 50%;
+    /* Slightly lighter for cards/modals */
+    --card: 240 5% 8%;
+    --card-foreground: 210 20% 95%;
     
-    --popover: 120 100% 4%;
-    --popover-foreground: 120 100% 50%;
+    --popover: 240 5% 6%;
+    --popover-foreground: 210 20% 95%;
     
-    --primary: 120 100% 40%;
-    --primary-foreground: 120 100% 5%;
+    /* Elegant emerald/mint green for primary */
+    --primary: 150 70% 45%;
+    --primary-foreground: 150 100% 8%;
     
-    --secondary: 120 100% 12%;
-    --secondary-foreground: 120 100% 60%;
+    --secondary: 240 5% 12%;
+    --secondary-foreground: 150 70% 55%;
     
-    --muted: 120 100% 10%;
-    --muted-foreground: 120 100% 30%;
+    --muted: 240 5% 12%;
+    --muted-foreground: 240 10% 60%;
     
-    --accent: 120 100% 20%;
-    --accent-foreground: 120 100% 70%;
+    --accent: 150 30% 15%;
+    --accent-foreground: 150 70% 60%;
     
-    --destructive: 0 100% 50%;
-    --destructive-foreground: 0 100% 10%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 100% 98%;
     
-    --border: 120 100% 20%;
-    --input: 120 100% 15%;
-    --ring: 120 100% 50%;
+    --border: 240 5% 18%;
+    --input: 240 5% 15%;
+    --ring: 150 70% 45%;
     
-    --radius: 0rem;
+    /* Softer edges */
+    --radius: 0.5rem;
   }
 }
 
@@ -45,27 +49,31 @@
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
-    font-family: 'Fira Code', monospace;
-    text-shadow: 0 0 4px rgba(0, 255, 0, 0.3);
+    @apply font-sans;
   }
 }
 
-/* Custom scrollbar for hacker vibes */
-::-webkit-scrollbar {
-  width: 10px;
-}
-::-webkit-scrollbar-track {
-  background: hsl(var(--background));
-  border-left: 1px solid hsl(var(--border));
-}
-::-webkit-scrollbar-thumb {
-  background: hsl(var(--primary));
-}
-::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--ring));
+/* Specific class for the terminal text-shadow glow effect instead of global */
+.terminal-glow {
+  text-shadow: 0 0 6px rgba(46, 204, 113, 0.4);
 }
 
-/* Scanline effect */
+/* Custom scrollbar for a polished look */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}
+
+/* Subtle Scanline effect */
 .scanlines {
   position: fixed;
   top: 0;
@@ -76,11 +84,11 @@
     to bottom,
     rgba(255,255,255,0),
     rgba(255,255,255,0) 50%,
-    rgba(0,0,0,0.2) 50%,
-    rgba(0,0,0,0.2)
+    rgba(0,0,0,0.1) 50%,
+    rgba(0,0,0,0.1)
   );
   background-size: 100% 4px;
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.6;
+  opacity: 0.4;
 }
