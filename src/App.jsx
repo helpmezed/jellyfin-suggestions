@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Terminal, Plus, Search, Check, Settings, Star, Database, ShieldAlert, Clock, ThumbsUp, Trash2, X } from 'lucide-react';
+import { Terminal, Plus, Search, Check, Settings, Star, Database, ShieldAlert, Clock, ThumbsUp, Trash2, X, Film, Sparkles } from 'lucide-react';
 import { useSuggestions } from './hooks/useSuggestions';
 import { searchTmdb, searchJellyfin, hasJellyfinConfig, setTmdbKey, setJellyfinConfig, getJellyfinConfig, getTmdbKey, getTmdbGenres } from './lib/api';
 
@@ -9,16 +9,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
-
-const ASCII_ART = `
-      _  _______ _      _ __     __  _____ _____ _   _ 
-     | ||  ___| |    | |\\ \\   / / |  ___|_   _| \\ | |
-     | || |__ | |    | | \\ \\_/ /  | |__   | | |  \\| |
- _   | ||  __|| |    | |  \\   /   |  __|  | | | . \` |
-| |__| || |___| |____| |___| |    | |    _| |_| |\\  |
- \\____/ \\____/\\_____/\\_____/_|    \\_|   |_____\\_| \\_/
- :: SYSTEM SUGGESTIONS TERMINAL v3.1 :: SECURE //
-`;
 
 export default function App() {
   const { suggestions, addSuggestion, deleteSuggestion, toggleVote, setStatus } = useSuggestions();
@@ -69,20 +59,28 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen p-4 md:p-8 max-w-6xl mx-auto">
-      <div className="scanlines"></div>
-      
+    <div className="min-h-screen p-4 md:p-8 max-w-7xl mx-auto relative z-10">
       {/* HEADER */}
-      <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-md border-b border-border pt-4 pb-4 mb-8 -mx-4 px-4 md:-mx-8 md:px-8">
-        <pre className="text-primary terminal-glow text-[10px] sm:text-xs md:text-sm font-bold leading-tight mb-4 whitespace-pre-wrap font-mono">
-          {ASCII_ART}
-        </pre>
-        <div className="flex flex-wrap gap-4 items-center justify-between">
-          <div className="flex gap-4 font-mono text-sm">
-            <span className="text-muted-foreground">TOTAL: <span className="text-foreground">{stats.total}</span></span>
-            <span className="text-muted-foreground">PENDING: <span className="text-foreground">{stats.pending}</span></span>
-            <span className="text-muted-foreground">APPROVED: <span className="text-foreground">{stats.approved}</span></span>
-            <span className="text-muted-foreground">AVAIL: <span className="text-foreground">{stats.available}</span></span>
+      <header className="sticky top-0 z-40 bg-background/60 backdrop-blur-2xl border-b border-white/5 pt-6 pb-4 mb-10 -mx-4 px-4 md:-mx-8 md:px-8 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)]">
+        <div className="flex flex-col md:flex-row gap-6 md:gap-4 items-center justify-between">
+          
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
+              <Film className="w-5 h-5 text-primary-foreground" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
+                Cinematic <span className="text-primary">Dashboard</span>
+              </h1>
+              <p className="text-xs text-muted-foreground font-mono">v4.0 // PREMIUM EDITION</p>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-3 md:gap-6 font-mono text-xs md:text-sm">
+            <div className="flex flex-col items-center"><span className="text-muted-foreground text-[10px] uppercase">Total</span><span className="text-foreground font-bold">{stats.total}</span></div>
+            <div className="flex flex-col items-center"><span className="text-muted-foreground text-[10px] uppercase">Pending</span><span className="text-yellow-500 font-bold">{stats.pending}</span></div>
+            <div className="flex flex-col items-center"><span className="text-muted-foreground text-[10px] uppercase">Approved</span><span className="text-green-500 font-bold">{stats.approved}</span></div>
+            <div className="flex flex-col items-center"><span className="text-muted-foreground text-[10px] uppercase">Available</span><span className="text-cyan-500 font-bold">{stats.available}</span></div>
           </div>
           
           <div className="flex gap-2">
@@ -99,19 +97,19 @@ export default function App() {
                 <div className="space-y-4 py-4">
                   <div className="space-y-2">
                     <label className="text-xs text-muted-foreground uppercase">TMDB API Key</label>
-                    <Input value={tmdbInput} onChange={e => setTmdbInput(e.target.value)} placeholder="v3 auth key..." className="font-mono bg-black/50" />
+                    <Input value={tmdbInput} onChange={e => setTmdbInput(e.target.value)} placeholder="v3 auth key..." className="font-mono bg-black/50 border-white/10 rounded-lg" />
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs text-muted-foreground uppercase">Jellyfin URL</label>
-                    <Input value={jfUrlInput} onChange={e => setJfUrlInput(e.target.value)} placeholder="http://192.168.1.10:8096" className="font-mono bg-black/50" />
+                    <Input value={jfUrlInput} onChange={e => setJfUrlInput(e.target.value)} placeholder="http://192.168.1.10:8096" className="font-mono bg-black/50 border-white/10 rounded-lg" />
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs text-muted-foreground uppercase">Jellyfin API Key</label>
-                    <Input value={jfKeyInput} onChange={e => setJfKeyInput(e.target.value)} placeholder="Auth Token..." className="font-mono bg-black/50" />
+                    <Input value={jfKeyInput} onChange={e => setJfKeyInput(e.target.value)} placeholder="Auth Token..." className="font-mono bg-black/50 border-white/10 rounded-lg" />
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button onClick={saveConfig} className="w-full bg-primary text-primary-foreground hover:bg-primary/80 uppercase tracking-widest font-bold">
+                  <Button onClick={saveConfig} className="w-full bg-primary text-primary-foreground hover:bg-primary/80 uppercase tracking-widest font-bold rounded-lg shadow-lg">
                     SAVE CONFIGURATION
                   </Button>
                 </DialogFooter>
@@ -120,13 +118,13 @@ export default function App() {
 
             <Dialog open={isSuggestOpen} onOpenChange={setIsSuggestOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-primary text-primary-foreground hover:bg-primary/80 font-mono uppercase tracking-wider text-xs font-bold">
-                  <Plus className="w-4 h-4 mr-2" /> INJECT PAYLOAD
+                <Button className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold tracking-wide rounded-full shadow-[0_0_20px_rgba(30,200,120,0.3)] transition-all hover:shadow-[0_0_30px_rgba(30,200,120,0.5)]">
+                  <Sparkles className="w-4 h-4 mr-2" /> New Request
                 </Button>
               </DialogTrigger>
-              <DialogContent className="border-border bg-background sm:max-w-xl font-mono">
+              <DialogContent className="glass-panel sm:max-w-xl font-sans border-white/10">
                 <DialogHeader>
-                  <DialogTitle className="uppercase text-foreground tracking-widest text-lg">Inject Suggestion Payload</DialogTitle>
+                  <DialogTitle className="text-foreground tracking-tight text-xl font-bold">New Suggestion Request</DialogTitle>
                 </DialogHeader>
                 <SuggestionForm onClose={() => setIsSuggestOpen(false)} onAdd={addSuggestion} />
               </DialogContent>
@@ -137,13 +135,13 @@ export default function App() {
 
       {/* TOOLBAR */}
       <div className="flex flex-col md:flex-row gap-4 mb-8">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+        <div className="relative flex-1 group">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
           <Input 
-            placeholder="SEARCH DATABASE..." 
+            placeholder="Search titles or overviews..." 
             value={query}
             onChange={e => setQuery(e.target.value)}
-            className="pl-9 font-mono bg-black/40 border-border uppercase"
+            className="pl-11 bg-black/40 border-white/10 rounded-full focus-visible:ring-primary/50 transition-all text-sm"
           />
         </div>
         <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 hide-scroll">
@@ -153,12 +151,13 @@ export default function App() {
               variant={filter === f ? 'default' : 'outline'}
               size="sm"
               onClick={() => setFilter(f)}
-              className={`font-mono uppercase text-xs ${filter === f ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground hover:bg-muted'}`}
+              className={`rounded-full capitalize text-xs tracking-wide transition-all ${filter === f ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20' : 'bg-black/20 border-white/5 text-muted-foreground hover:text-foreground hover:bg-white/5 hover:border-white/10'}`}
             >
               {f}
             </Button>
           ))}
         </div>
+        <div className="w-px h-8 bg-border hidden md:block mx-2 self-center"></div>
         <div className="flex gap-2">
           {['newest', 'votes', 'rating'].map(s => (
              <Button 
@@ -166,7 +165,7 @@ export default function App() {
               variant={sort === s ? 'default' : 'outline'}
               size="sm"
               onClick={() => setSort(s)}
-              className={`font-mono uppercase text-xs ${sort === s ? 'bg-secondary text-secondary-foreground' : 'text-muted-foreground hover:text-foreground hover:bg-muted'}`}
+              className={`rounded-full capitalize text-xs tracking-wide transition-all ${sort === s ? 'bg-secondary text-secondary-foreground' : 'bg-black/20 border-white/5 text-muted-foreground hover:text-foreground hover:bg-white/5'}`}
             >
               {s}
             </Button>
@@ -209,28 +208,28 @@ function SuggestionCard({ s, onVote, onDelete, onSetStatus }) {
   };
 
   return (
-    <Card className="bg-card border-border overflow-hidden flex flex-col font-mono relative group hover:border-primary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_-4px_rgba(46,204,113,0.15)]">
-      <div className="absolute top-2 right-2 z-10 flex gap-2">
+    <Card className="glass-panel overflow-hidden flex flex-col relative group transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(30,200,120,0.2)] hover:border-white/10">
+      <div className="absolute top-3 right-3 z-20 flex gap-2">
         {s.rating > 0 && (
-          <Badge variant="outline" className="bg-black/80 backdrop-blur-sm border-yellow-500/30 text-yellow-500">
+          <Badge variant="outline" className="bg-black/40 backdrop-blur-md border-yellow-500/30 text-yellow-500 font-mono">
             ⭐ {s.rating.toFixed(1)}
           </Badge>
         )}
       </div>
 
-      <div className="h-48 relative bg-muted overflow-hidden">
+      <div className="h-56 relative bg-muted overflow-hidden">
         {s.backdropPath || s.posterPath ? (
           <img 
             src={`https://image.tmdb.org/t/p/w500${s.backdropPath || s.posterPath}`} 
             alt={s.title}
-            className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity mix-blend-luminosity hover:mix-blend-normal"
+            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-muted-foreground opacity-20">
-            <Terminal className="w-16 h-16" />
+          <div className="w-full h-full flex items-center justify-center text-muted-foreground opacity-20 bg-gradient-to-br from-black to-secondary">
+            <Film className="w-16 h-16" />
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
         
         <div className="absolute bottom-2 left-2 flex flex-wrap gap-1">
           {s.genres?.slice(0,3).map(g => (
@@ -239,14 +238,14 @@ function SuggestionCard({ s, onVote, onDelete, onSetStatus }) {
         </div>
       </div>
 
-      <CardHeader className="p-4 pb-2">
+      <CardHeader className="p-5 pb-2 relative z-10 -mt-8">
         <div className="flex justify-between items-start gap-2">
-          <CardTitle className="text-lg text-primary terminal-glow font-bold leading-tight uppercase tracking-wide">{s.title}</CardTitle>
-          <Badge variant="outline" className={`uppercase text-[10px] tracking-wider ${statusColors[s.status] || ''}`}>
+          <CardTitle className="text-xl text-foreground font-bold leading-tight tracking-tight drop-shadow-md">{s.title}</CardTitle>
+          <Badge variant="outline" className={`uppercase text-[10px] tracking-wider font-mono border ${statusColors[s.status] || ''}`}>
             {s.status}
           </Badge>
         </div>
-        {s.year && <CardDescription className="text-muted-foreground text-xs">YR: {s.year}</CardDescription>}
+        {s.year && <CardDescription className="text-primary/80 font-mono text-xs">{s.year}</CardDescription>}
       </CardHeader>
       
       <CardContent className="p-4 pt-0 flex-1">
@@ -258,10 +257,12 @@ function SuggestionCard({ s, onVote, onDelete, onSetStatus }) {
         )}
       </CardContent>
 
-      <CardFooter className="p-4 border-t border-border flex justify-between items-center bg-black/40">
+      <CardFooter className="p-4 border-t border-white/5 flex justify-between items-center bg-white/[0.02]">
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <span className="opacity-50">USR:</span>
-          <span className="text-foreground truncate max-w-[80px]">{s.submitter}</span>
+          <div className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-[10px] text-foreground border border-white/10 uppercase font-bold">
+            {s.submitter?.substring(0,2) || 'AN'}
+          </div>
+          <span className="text-foreground/80 truncate max-w-[80px] font-medium">{s.submitter || 'Anonymous'}</span>
         </div>
         
         <div className="flex items-center gap-2">
@@ -363,25 +364,25 @@ function SuggestionForm({ onClose, onAdd }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4 py-4 relative">
       <div className="space-y-2 relative">
-        <label className="text-xs text-muted-foreground uppercase">Target Identifier (Title)</label>
+        <label className="text-xs text-muted-foreground uppercase tracking-wide font-medium">Search Title</label>
         <Input 
           value={title} 
           onChange={e => { setTitle(e.target.value); setSelectedTmdb(null); }}
           placeholder="e.g. The Matrix" 
-          className="font-mono bg-black/50 border-primary/50 text-foreground"
+          className="font-sans bg-black/30 border-white/10 rounded-lg text-foreground focus-visible:ring-primary/50 text-base"
           required
         />
         {isSearching && <div className="text-xs text-primary mt-1 animate-pulse">Querying external db...</div>}
         
         {tmdbResults.length > 0 && (
-          <div className="absolute top-full left-0 right-0 mt-1 bg-black border border-border rounded-sm shadow-xl z-50 max-h-48 overflow-y-auto">
+          <div className="absolute top-full left-0 right-0 mt-2 glass-panel rounded-xl z-50 max-h-48 overflow-y-auto">
             {tmdbResults.map(r => (
               <div 
                 key={r.id} 
                 onClick={() => handleSelectTmdb(r)}
-                className="px-3 py-2 text-xs hover:bg-primary/20 cursor-pointer flex justify-between uppercase"
+                className="px-4 py-3 text-sm hover:bg-white/5 cursor-pointer flex justify-between transition-colors border-b border-white/5 last:border-0"
               >
-                <span className="truncate pr-2">{r.title}</span>
+                <span className="truncate pr-2 font-medium">{r.title}</span>
                 <span className="text-muted-foreground shrink-0">{r.release_date?.substring(0,4)}</span>
               </div>
             ))}
@@ -390,36 +391,37 @@ function SuggestionForm({ onClose, onAdd }) {
       </div>
 
       {selectedTmdb && (
-        <div className="bg-primary/5 border border-primary/20 p-3 flex gap-3 rounded-sm">
+        <div className="bg-primary/10 border border-primary/20 p-3 flex gap-4 rounded-xl shadow-inner relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent pointer-events-none" />
           {selectedTmdb.posterPath ? (
-            <img src={`https://image.tmdb.org/t/p/w92${selectedTmdb.posterPath}`} alt={`${selectedTmdb.title} poster`} className="w-12 h-16 object-cover mix-blend-luminosity opacity-80" />
-          ) : <div className="w-12 h-16 bg-black flex items-center justify-center"><Terminal className="w-6 h-6 text-primary/50"/></div>}
-          <div className="flex-1 min-w-0">
-            <div className="text-sm font-bold truncate text-primary terminal-glow font-mono">{selectedTmdb.title}</div>
-            <div className="text-xs text-muted-foreground mt-1 line-clamp-2 font-sans">{selectedTmdb.overview}</div>
+            <img src={`https://image.tmdb.org/t/p/w92${selectedTmdb.posterPath}`} alt={`${selectedTmdb.title} poster`} className="w-16 h-24 rounded-md object-cover shadow-lg" />
+          ) : <div className="w-16 h-24 rounded-md bg-black/50 flex items-center justify-center"><Film className="w-6 h-6 text-primary/50"/></div>}
+          <div className="flex-1 min-w-0 py-1">
+            <div className="text-base font-bold truncate text-foreground tracking-tight">{selectedTmdb.title}</div>
+            <div className="text-sm text-muted-foreground mt-1 line-clamp-3 font-sans leading-relaxed">{selectedTmdb.overview}</div>
           </div>
-          <button type="button" onClick={() => setSelectedTmdb(null)} className="self-start text-muted-foreground hover:text-destructive"><X className="w-4 h-4"/></button>
+          <button type="button" onClick={() => setSelectedTmdb(null)} className="absolute top-2 right-2 text-muted-foreground hover:text-white bg-black/40 hover:bg-black/80 rounded-full p-1 transition-colors"><X className="w-4 h-4"/></button>
         </div>
       )}
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <label className="text-xs text-muted-foreground uppercase">Year</label>
-          <Input value={year} onChange={e => setYear(e.target.value)} className="font-mono bg-black/50" />
+          <label className="text-xs text-muted-foreground uppercase font-medium">Year</label>
+          <Input value={year} onChange={e => setYear(e.target.value)} className="font-mono bg-black/30 border-white/10 rounded-lg" />
         </div>
         <div className="space-y-2">
-          <label className="text-xs text-muted-foreground uppercase">Agent</label>
-          <Input value={submitter} onChange={e => setSubmitter(e.target.value)} placeholder="Anonymous" className="font-mono bg-black/50" />
+          <label className="text-xs text-muted-foreground uppercase font-medium">Requested By</label>
+          <Input value={submitter} onChange={e => setSubmitter(e.target.value)} placeholder="Anonymous" className="font-sans bg-black/30 border-white/10 rounded-lg" />
         </div>
       </div>
 
       <div className="space-y-2">
-        <label className="text-xs text-muted-foreground uppercase">Mission Notes</label>
+        <label className="text-xs text-muted-foreground uppercase font-medium">Additional Notes</label>
         <Textarea 
           value={note} 
           onChange={e => setNote(e.target.value)}
-          className="font-sans bg-black/50 min-h-[80px] text-sm"
-          placeholder="Why target this media..."
+          className="font-sans bg-black/30 border-white/10 rounded-lg min-h-[80px] text-sm resize-none"
+          placeholder="Why should we watch this?"
         />
       </div>
 
@@ -427,9 +429,9 @@ function SuggestionForm({ onClose, onAdd }) {
         <Button 
           type="submit" 
           disabled={isSubmitting}
-          className="w-full bg-primary text-primary-foreground hover:bg-primary/80 uppercase font-bold tracking-widest relative overflow-hidden group"
+          className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold tracking-wide rounded-lg shadow-lg relative overflow-hidden group h-12 text-base"
         >
-          {isSubmitting ? 'EXECUTING PAYLOAD...' : 'TRANSMIT REQUEST'}
+          {isSubmitting ? 'PROCESSING...' : 'SUBMIT REQUEST'}
           {!isSubmitting && <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover:animate-[shimmer_1s_infinite] skew-x-12" />}
         </Button>
       </DialogFooter>
