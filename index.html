@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Movie Suggestions — Jellyfin</title>
+  <meta name="description" content="Submit and vote on movie suggestions for the Jellyfin media server. Powered by TMDB." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Ambient floating orbs -->
+  <div class="ambient-bg" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <div class="app-container">
+
+    <!-- ─── Header ─── -->
+    <header class="app-header" id="app-header">
+      <div class="logo-wrap">
+        <span class="logo-icon">🎬</span>
+      </div>
+      <h1>Movie Suggestions</h1>
+      <p class="subtitle">Suggest, vote, and discover what to watch next</p>
+      <div class="jellyfin-badge">
+        <span class="dot"></span>
+        Jellyfin Server
+      </div>
+    </header>
+
+    <!-- ─── Stats ─── -->
+    <div class="stats-bar" id="stats-bar">
+      <div class="stat-chip">
+        <span class="stat-icon">📋</span>
+        <span class="stat-value" id="stat-total">0</span>
+        <span class="stat-label">Total</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-icon">⏳</span>
+        <span class="stat-value" id="stat-pending">0</span>
+        <span class="stat-label">Pending</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-icon">✅</span>
+        <span class="stat-value" id="stat-approved">0</span>
+        <span class="stat-label">Approved</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-icon">🎬</span>
+        <span class="stat-value" id="stat-watched">0</span>
+        <span class="stat-label">Watched</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-icon">📥</span>
+        <span class="stat-value" id="stat-available">0</span>
+        <span class="stat-label">Available</span>
+      </div>
+    </div>
+
+    <!-- ─── Toolbar ─── -->
+    <div class="toolbar" id="toolbar">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" placeholder="Search suggestions…" autocomplete="off" />
+      </div>
+
+      <div class="filter-group" id="filter-group">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="pending">Pending</button>
+        <button class="filter-btn" data-filter="approved">Approved</button>
+        <button class="filter-btn" data-filter="watched">Watched</button>
+        <button class="filter-btn" data-filter="available">Available</button>
+        <button class="filter-btn" data-filter="declined">Declined</button>
+      </div>
+
+      <select class="sort-select" id="sort-select">
+        <option value="newest">Newest first</option>
+        <option value="oldest">Oldest first</option>
+        <option value="most-votes">Most votes</option>
+        <option value="highest-rated">Highest rated</option>
+        <option value="title-az">Title A–Z</option>
+      </select>
+
+      <button class="btn-add" id="btn-open-modal">
+        <span>＋</span> Suggest a Movie
+      </button>
+    </div>
+
+    <!-- ─── Card Grid ─── -->
+    <div class="suggestions-grid" id="suggestions-grid"></div>
+  </div>
+
+  <!-- ─── Modal: New Suggestion ─── -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal" role="dialog" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <h2 id="modal-title">🎥 Suggest a Movie</h2>
+        <button class="btn-close" id="btn-close-modal" aria-label="Close">✕</button>
+      </div>
+
+      <form id="suggestion-form" autocomplete="off">
+        <!-- Title with TMDB search -->
+        <div class="form-group">
+          <label for="field-title">
+            Movie Title *
+            <span class="label-hint">— type to search TMDB</span>
+          </label>
+          <input type="text" id="field-title" name="title" placeholder="e.g. Interstellar" required />
+          <div class="tmdb-search-results" id="tmdb-search-results"></div>
+        </div>
+
+        <!-- TMDB preview card -->
+        <div class="tmdb-preview" id="tmdb-preview"></div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="field-year">Year</label>
+            <input type="text" id="field-year" name="year" placeholder="e.g. 2014" maxlength="4" />
+          </div>
+          <div class="form-group">
+            <label for="field-genre">Genre</label>
+            <select id="field-genre" name="genre">
+              <option value="">Auto-detect or select…</option>
+              <option value="Action">Action</option>
+              <option value="Adventure">Adventure</option>
+              <option value="Animation">Animation</option>
+              <option value="Comedy">Comedy</option>
+              <option value="Crime">Crime</option>
+              <option value="Documentary">Documentary</option>
+              <option value="Drama">Drama</option>
+              <option value="Fantasy">Fantasy</option>
+              <option value="Horror">Horror</option>
+              <option value="Musical">Musical</option>
+              <option value="Mystery">Mystery</option>
+              <option value="Romance">Romance</option>
+              <option value="Sci-Fi">Sci-Fi</option>
+              <option value="Thriller">Thriller</option>
+              <option value="Western">Western</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="field-note">Why should we watch this?</label>
+          <textarea id="field-note" name="note" placeholder="Tell everyone why this movie is a must-watch…" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="field-submitter">Your Name</label>
+          <input type="text" id="field-submitter" name="submitter" placeholder="Anonymous" />
+        </div>
+
+        <button type="submit" class="btn-submit" id="btn-submit">🎬 Submit Suggestion</button>
+      </form>
+
+      <div style="text-align:center; margin-top:1rem; display: flex; gap: 0.5rem; justify-content: center;">
+        <button type="button" id="btn-tmdb-setup" style="
+          background: none;
+          border: 1px solid var(--border-subtle);
+          color: var(--text-muted);
+          font-size: 0.72rem;
+          padding: 0.35rem 0.85rem;
+          border-radius: 100px;
+          cursor: pointer;
+          font-family: var(--font-primary);
+          transition: var(--transition-fast);
+        " onmouseover="this.style.borderColor='var(--accent-primary)';this.style.color='var(--text-secondary)'"
+           onmouseout="this.style.borderColor='var(--border-subtle)';this.style.color='var(--text-muted)'">
+          🔑 Configure TMDB API
+        </button>
+        <button type="button" id="btn-jellyfin-setup" style="
+          background: none;
+          border: 1px solid var(--border-subtle);
+          color: var(--text-muted);
+          font-size: 0.72rem;
+          padding: 0.35rem 0.85rem;
+          border-radius: 100px;
+          cursor: pointer;
+          font-family: var(--font-primary);
+          transition: var(--transition-fast);
+        " onmouseover="this.style.borderColor='var(--accent-primary)';this.style.color='var(--text-secondary)'"
+           onmouseout="this.style.borderColor='var(--border-subtle)';this.style.color='var(--text-muted)'">
+          ⚙️ Configure Jellyfin API
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
