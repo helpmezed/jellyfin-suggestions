@@ -218,9 +218,9 @@ function SuggestionCard({ s, onVote, onDelete, onSetStatus }) {
       </div>
 
       <div className="h-56 relative bg-muted overflow-hidden">
-        {s.backdropPath || s.posterPath ? (
+        {s.posterPath || s.backdropPath ? (
           <img 
-            src={`https://image.tmdb.org/t/p/w500${s.backdropPath || s.posterPath}`} 
+            src={`https://image.tmdb.org/t/p/w500${s.posterPath || s.backdropPath}`} 
             alt={s.title}
             className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
           />

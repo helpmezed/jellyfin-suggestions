@@ -32,6 +32,7 @@ export function useSuggestions() {
       votedBy: [],
       status: data.isAvailable ? 'available' : 'pending',
       createdAt: new Date().toISOString(),
+      imdbLink: data.imdbLink || null,
       tmdbId: data.tmdb?.id || null,
       posterPath: data.tmdb?.posterPath || null,
       backdropPath: data.tmdb?.backdropPath || null,
